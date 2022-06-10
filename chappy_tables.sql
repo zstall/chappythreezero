@@ -1,9 +1,10 @@
 CREATE TABLE orgs (
 	org_id uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
 	org_name VARCHAR (255),
-	date_created TIMESTAMP NOT NULL ,
+	date_created TIMESTAMP NOT NULL,
 	users_ids TEXT[],
-	org_deleted BOOLEAN NOT NULL DEFAULT FALSE
+	org_deleted BOOLEAN NOT NULL DEFAULT FALSE,
+	date_updated TIMESTAMP NOT NULL
 );
 
 
@@ -17,6 +18,7 @@ CREATE TABLE users (
  	password TEXT NOT NULL,
 	org_ids TEXT[],
 	date_created TIMESTAMP NOT NULL,
+	date_updated TIMESTAMP NOT NULL,
 	user_admin BOOLEAN DEFAULT FALSE,
 	user_super_user BOOLEAN DEFAULT FALSE,
 	user_deleted BOOLEAN NOT NULL DEFAULT FALSE
@@ -30,6 +32,8 @@ CREATE TABLE chores (
 	user_id VARCHAR (255),
 	org_id UUID NOT NULL,
 	chore_deleted BOOLEAN NOT NULL DEFAULT FALSE,
+	date_created TIMESTAMP NOT NULL,
+	date_updated TIMESTAMP NOT NULL,
 	CONSTRAINT org_fk
 		FOREIGN KEY(org_id)
 			REFERENCES orgs(org_id)
