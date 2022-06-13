@@ -2,7 +2,7 @@ CREATE TABLE orgs (
 	org_id uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
 	org_name VARCHAR (255),
 	date_created TIMESTAMP NOT NULL,
-	users_ids TEXT[],
+	user_ids TEXT[],
 	org_deleted BOOLEAN NOT NULL DEFAULT FALSE,
 	date_updated TIMESTAMP NOT NULL
 );

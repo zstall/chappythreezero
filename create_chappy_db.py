@@ -33,7 +33,7 @@ def executeScript(script):
             print('Database connection closed.')
             print('Queries Executed Succesfully.') 
 
-def executeInserts(fn, ln, ph, eml, usrnm, psswrd, created, usr_admin, usr_super_user):
+def executeInserts(fn, ln, ph, eml, usrnm, psswrd, created, updated, usr_admin, usr_super_user):
     """" Fill out laters, yes I'm lazy :) """
 
     conn = None
@@ -45,7 +45,7 @@ def executeInserts(fn, ln, ph, eml, usrnm, psswrd, created, usr_admin, usr_super
         print('Connecting to the PostgreSQL database...')
         conn = psycopg2.connect(**params)
 
-        query = "INSERT INTO users (fname, lname, phone, email, username, password, date_created, user_admin, user_super_user) VALUES("+fn+","+ln+","+ph+","+eml+","+usrnm+","+psswrd+","+created+","+usr_admin+","+usr_super_user+");"
+        query = "INSERT INTO users (fname, lname, phone, email, username, password, date_created, date_updated, user_admin, user_super_user) VALUES("+fn+","+ln+","+ph+","+eml+","+usrnm+","+psswrd+","+created+","+updated+","+usr_admin+","+usr_super_user+");"
 
         # create a cursor
         cur = conn.cursor()
@@ -114,11 +114,11 @@ def main():
     connect('"chappy_tables.sql"', True)
     print()
     print()
-    executeInserts("'admin'", "'admin'", "'5555555555'", "'admin@noreply.com'", "'admin'", "crypt('admin', gen_salt('bf', 8))","current_timestamp", "True", "True")
-    executeInserts("'Zach'", "'Stall'", "'5555555555'", "'zstall@noreply.com'", "'zstall'", "crypt('password', gen_salt('bf', 8))","current_timestamp", "True", "False")
-    executeInserts("'Sam'", "'Stall'", "'5555555555'", "'sstall@noreply.com'", "'sstall'", "crypt('password', gen_salt('bf', 8))","current_timestamp", "False", "False")
-    executeInserts("'Caitlin'", "'Kelly'", "'5555555555'", "'ckelly@noreply.com'", "'ckelly'", "crypt('password', gen_salt('bf', 8))","current_timestamp", "False", "False")
-    executeInserts("'Test'", "'User'", "'5555555555'", "'tuser@noreply.com'", "'tuser'", "crypt('password', gen_salt('bf', 8))","current_timestamp", "False", "False")
+    executeInserts("'admin'", "'admin'", "'5555555555'", "'admin@noreply.com'", "'admin'", "crypt('admin', gen_salt('bf', 8))","current_timestamp","current_timestamp", "True", "True")
+    executeInserts("'Zach'", "'Stall'", "'5555555555'", "'zstall@noreply.com'", "'zstall'", "crypt('password', gen_salt('bf', 8))","current_timestamp","current_timestamp", "True", "False")
+    executeInserts("'Sam'", "'Stall'", "'5555555555'", "'sstall@noreply.com'", "'sstall'", "crypt('password', gen_salt('bf', 8))","current_timestamp", "current_timestamp","False", "False")
+    executeInserts("'Caitlin'", "'Kelly'", "'5555555555'", "'ckelly@noreply.com'", "'ckelly'", "crypt('password', gen_salt('bf', 8))","current_timestamp", "current_timestamp","False", "False")
+    executeInserts("'Test'", "'User'", "'5555555555'", "'tuser@noreply.com'", "'tuser'", "crypt('password', gen_salt('bf', 8))","current_timestamp", "current_timestamp", "False", "False")
 
 if __name__ == '__main__':
     main()
