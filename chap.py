@@ -39,8 +39,10 @@ class User:
         self.super_user = super_user
         self.deleted = deleted
     
-
-
+    def add_user_to_db(self, psswrd):
+        query = "INSERT INTO users (fname, lname, phone, email, username, org_ids, password, date_created, date_updated, user_admin, user_super_user) VALUES(" + "'"+self.fname+"', " + "'"+self.lname+"' ," + "'"+self.phone+"' ," + "'"+self.email+"', " + "'"+self.username+"' , '" + self.org_ids + "', " + "crypt('"+psswrd+"', gen_salt('bf', 8)), current_timestamp, current_timestamp, " + self.admin + "," + self.super_user +");"
+        query_chappy(query)
+    
     def assign_org(self, org):
         """ 
             Assign an org attribute to a user.
@@ -65,13 +67,34 @@ class User:
             query_chappy("UPDATE users SET org_ids = org_ids || '{\"" + org_id[0][0] + "\"}' where user_id = '" + self.user_id + "';")
             self.org_ids.append(org_id[0][0])
 
-    def add_user_to_db(self, psswrd):
-        executeInserts("'"+self.fname+"'", "'"+self.lname+"'", "'"+self.phone+"'", "'"+self.email+"'", "'"+self.username+"'", "crypt('"+psswrd+"', gen_salt('bf', 8))","current_timestamp","current_timestamp", self.admin, self.super_user)
+class Org:
+    def __init__(self, org_id, org_name, date_created, user_ids, org_deleted, date_udpated):
+        self.org_id = org_id
+        self.org_name = org_name 
+        self.date_created = date_created
+        self.user_ids = user_ids
+        self.org_deleted = org_deleted
+        self.date_updated = date_udpated
 
-#class Org:
- #   def __init__(self, org_id, org_name, date_created, user_ids, org_deleted, date_udpated):
+    def add_org_to_db(self):
+        query = "INSERT INTO orgs (org_name, date_created, user_ids, org_deleted, date_updated) VALUES(" + "'"+self.org_name+"', " + "current_timestamp, '" + self.user_ids +"', 'False', current_timestamp);"
+        query_chappy(query)
 
-            
+    def assign_users(self, user_name):
+        user_id = query_chappy("SELECT user_id FROM users WHERE username = '" + user_name +"';")
+
+        if self.user_ids == None:
+            query_chappy("UPDATE orgs SET user_ids = user_ids || '{\"" + user_id[0][0] + "\"}' where org_id = '" + self.org_id + "';")
+            query_chappy("UPDATE users SET org_ids = org_ids || '{\"" + self.org_id + "\"}' where user_id = '" + user_id[0][0] + "';")
+            self.user_ids = user_id[0][0]
+        elif len(self.user_ids) >= 1 and user_id[0][0] in self.user_ids:
+            print("User ID already assigned to org: " + str(user_id[0][0] in self.user_ids))
+        else:
+            print("Appending User Id to Org:")
+            query_chappy("UPDATE orgs SET user_ids = user_ids || '{\"" + user_id[0][0] + "\"}' where org_id = '" + self.org_id + "';")
+            query_chappy("UPDATE users SET org_ids = org_ids || '{\"" + self.org_id + "\"}' where user_id = '" + user_id[0][0] + "';")
+            print(self.user_ids)
+            self.user_ids.append(user_id[0][0])
 
 def query_chappy(query):
      """ function to connect to the DB and run queries """
@@ -112,29 +135,73 @@ def create_user(username, password):
     u = query_chappy("select * from users where username = '" + username + "' and password = crypt('" +password +"',password);")
     
     if u == '':
-        return ("Incorrect username or password")
+        print("Incorrect username or password")
+        pass
+    elif u == []:
+        print("Incorrect username or password")
+        pass
     else:
-        aman = User(u[0][0],u[0][1],u[0][2],u[0][3],u[0][4],u[0][5],u[0][6],u[0][7],u[0][8],u[0][9],u[0][10],u[0][11],u[0][12])
-        return aman
+        created_user = User(u[0][0],u[0][1],u[0][2],u[0][3],u[0][4],u[0][5],u[0][6],u[0][7],u[0][8],u[0][9],u[0][10],u[0][11],u[0][12])
+        return created_user
+
+def create_org(org_name):
+    o = query_chappy("select * from orgs where org_name = '" + org_name + "';")
+    if o == '':
+        print("Incorrect org name")
+        pass
+    elif o == []:
+        print("Incorrect org name")
+        pass
+    else:
+        create_org = Org(o[0][0],o[0][1],o[0][2],o[0][3],o[0][4],o[0][5])
+        return create_org
 
 def main():
 
 
 
+    """    
+    the_users = query_chappy("select * from users;")
     
+    all_users =[]
+    for u in the_users:
+        if(u[5] == 'admin'):
+            print("are we doing this?")
+            all_users.append(create_user(u[5],'admin'))
+        else:
+            all_users.append(create_user(u[5],'password'))
 
-    #u = User('','Ollie','Stall', '555-555-5555', 'ostall@noreplay.com','ostall', 'password', '','','','False','False','False')
-    #u.add_user_to_db('password')
     
-    new_usr = create_user("ostall", "password")
+    for u in all_users:
+        print(u.username)
+    
+    """ 
+    """
+    u = User('','admin','admin', '555-555-5555', 'lstall@noreplay.com','admin', 'admin', '','{}','','True','True','False')
+    u.add_user_to_db('admin')
+    
+    u = create_user("admin", "admin")
     #new_usr.assign_org("kelly_house")
-    new_usr.assign_org("stall_house")
-    new_usr.assign_org("kelly_house")
+    u.assign_org("stall_house")
+    u.assign_org("kelly_house")
     
     
-    print("User: " + new_usr.username)
-    print(new_usr.org_ids)
-    
+    print("User: " + u.username)
+    print(u.org_ids)
+    """
+
+    o = Org('', 'BooBoo', '', '{}', False, '')
+    o.add_org_to_db()
+
+    o = create_org("BooBoo")
+
+    o.assign_users("zstall")
+    o.assign_users("ckelly")
+    o.assign_users("zstall")
+
+    print("Org" + o.org_name)
+    print(o.user_ids)
+
 
 if __name__ == '__main__':
     main()
