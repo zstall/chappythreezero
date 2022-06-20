@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="task">
+<h1>Reset Complete</h1>
+<h4>Chores updated and message sent:</h4>
+  <div class="card">
+    {% for k in message %}
+    <div class="card-header">
+      <h6>{{ k }} here are your Chores: </h6>
+    </div>
+      <div class="card-body">
+        <ul>
+          {% for c in message[k] %}
+            <li>{{ c[1] }}</li>
+          {% endfor %}
+        </ul>
+        {% if d == 0 %}
+        <p>********************************************</p>
+        <h6>Here is your weekly chores:</h6>
+        <ul>
+          {% for w in wchr[k] %}
+            <li>{{ w[1] }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>********************************************</p>
+        <h6>Don't forget your weekly chores:</h6>
+        <ul>
+          {% for w in wchr[k] %}
+            <li>{{ w[1] }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  <a href={{ url_for('chores', user='admin') }}>Return to Admin Page</a>
+</div>
+
+{% endblock %}

@@ -1,0 +1,198 @@
+
+/* ----- Imports ----- */
+@import url(https://fonts.googleapis.com/css?family=Lato);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css);
+
+/* tiny reset */
+html, body {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+}
+/* body */
+body{
+  background: #FFB52E;
+  font-family: sans-serif;
+}
+/* title */
+h1, h4 {
+  color: #fff;
+  text-align: center;
+  font-size: 32px;
+  font-weight: 900;
+}
+
+/* header */
+
+h3 {
+  color: #a9a9a9;
+  text-align: center;
+  font-size: 32px;
+  font-weight: 900;
+}
+
+/* tasks */
+.card {
+	width: 40%;
+	margin: auto;
+}
+
+.tasks{
+  width: 300px;
+  height: 405px;
+  position: absolute;
+  top: 20%;
+  left: 0px;
+  right: 0px;
+  margin: 0px auto;
+}
+input[type=checkbox] {
+  display: none;
+}
+
+.card-header {
+	border-bottom: 1px solid #00CDFF;
+}
+
+label{
+  background: #fff;
+  height: 69px;
+  width: 100%;
+  display: block;
+  border-bottom: 1px solid #00CDFF;
+  color: #a9a9a9;
+  text-transform: capitalize;
+  font-weight: 900;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-indent: 20px;
+  cursor: pointer;
+  transition: all 0.7s ease;
+  position: relative;
+  padding: 5px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+label h5 span{
+  display: block;
+  font-size: 12px;
+  text-transform: capitalize;
+  font-weight: normal;
+  color: #a9a9a9;
+}
+label:before{
+  content:"";
+  width: 20px;
+  height: 20px;
+  background: #aaa;
+  display: block;
+  position: absolute;
+  border-radius: 100%;
+  right: 20px;
+  top: 30%;
+  transition: border 0.7s ease
+}
+
+#label-0:checked ~ label[for=label-0],
+#label-1:checked ~ label[for=label-1],
+#label-2:checked ~ label[for=label-2],
+#label-3:checked ~ label[for=label-3],
+#label-4:checked ~ label[for=label-4],
+#label-5:checked ~ label[for=label-5],
+#label-6:checked ~ label[for=label-6],
+#label-7:checked ~ label[for=label-7],
+#label-8:checked ~ label[for=label-8],
+#label-9:checked ~ label[for=label-9],
+#label-10:checked ~ label[for=label-10],
+#label-11:checked ~ label[for=label-11],
+#label-12:checked ~ label[for=label-12],
+#label-13:checked ~ label[for=label-13],
+#label-14:checked ~ label[for=label-14],
+#label-15:checked ~ label[for=label-15],
+#label-16:checked ~ label[for=label-16],
+#label-17:checked ~ label[for=label-17],
+#label-18:checked ~ label[for=label-18],
+#label-19:checked ~ label[for=label-19],
+#label-20:checked ~ label[for=label-20],
+#label-21:checked ~ label[for=label-21],
+#label-22:checked ~ label[for=label-22],
+#label-23:checked ~ label[for=label-23],
+#label-24:checked ~ label[for=label-24],
+#label-25:checked ~ label[for=label-25],
+#label-26:checked ~ label[for=label-26],
+#label-27:checked ~ label[for=label-27],
+#label-28:checked ~ label[for=label-28],
+#label-29:checked ~ label[for=label-29],
+#label-30:checked ~ label[for=label-30]{
+  background: #fff;
+  border-bottom: 1px solid #00CDFF;
+  color: #DF362D;
+}
+#label-0:checked ~ label[for=label-0] h2 span,
+#label-1:checked ~ label[for=label-1] h2 span,
+#label-2:checked ~ label[for=label-2] h2 span,
+#label-3:checked ~ label[for=label-3] h2 span,
+#label-4:checked ~ label[for=label-4] h2 span,
+#label-5:checked ~ label[for=label-5] h2 span,
+#label-6:checked ~ label[for=label-6] h2 span,
+#label-7:checked ~ label[for=label-7] h2 span,
+#label-8:checked ~ label[for=label-8] h2 span,
+#label-9:checked ~ label[for=label-9] h2 span,
+#label-10:checked ~ label[for=label-10] h2 span,
+#label-11:checked ~ label[for=label-11] h2 span,
+#label-12:checked ~ label[for=label-12] h2 span,
+#label-13:checked ~ label[for=label-13] h2 span,
+#label-14:checked ~ label[for=label-14] h2 span,
+#label-15:checked ~ label[for=label-15] h2 span,
+#label-16:checked ~ label[for=label-16] h2 span,
+#label-17:checked ~ label[for=label-17] h2 span,
+#label-18:checked ~ label[for=label-18] h2 span,
+#label-19:checked ~ label[for=label-19] h2 span,
+#label-20:checked ~ label[for=label-20] h2 span,
+#label-21:checked ~ label[for=label-21] h2 span,
+#label-22:checked ~ label[for=label-22] h2 span,
+#label-23:checked ~ label[for=label-23] h2 span,
+#label-24:checked ~ label[for=label-24] h2 span,
+#label-25:checked ~ label[for=label-25] h2 span,
+#label-26:checked ~ label[for=label-26] h2 span,
+#label-27:checked ~ label[for=label-27] h2 span,
+#label-28:checked ~ label[for=label-28] h2 span,
+#label-29:checked ~ label[for=label-29] h2 span,
+#label-30:checked ~ label[for=label-30] h2 span{
+  color: #DF362D;
+}
+#label-0:checked ~ label[for=label-0]:before,
+#label-1:checked ~ label[for=label-1]:before,
+#label-2:checked ~ label[for=label-2]:before,
+#label-3:checked ~ label[for=label-3]:before,
+#label-4:checked ~ label[for=label-4]:before,
+#label-5:checked ~ label[for=label-5]:before,
+#label-6:checked ~ label[for=label-6]:before,
+#label-7:checked ~ label[for=label-7]:before,
+#label-8:checked ~ label[for=label-8]:before,
+#label-9:checked ~ label[for=label-9]:before,
+#label-10:checked ~ label[for=label-10]:before,
+#label-11:checked ~ label[for=label-11]:before,
+#label-12:checked ~ label[for=label-12]:before,
+#label-13:checked ~ label[for=label-13]:before,
+#label-14:checked ~ label[for=label-14]:before,
+#label-15:checked ~ label[for=label-15]:before,
+#label-16:checked ~ label[for=label-16]:before,
+#label-17:checked ~ label[for=label-17]:before,
+#label-18:checked ~ label[for=label-18]:before,
+#label-19:checked ~ label[for=label-19]:before,
+#label-20:checked ~ label[for=label-20]:before,
+#label-21:checked ~ label[for=label-21]:before,
+#label-22:checked ~ label[for=label-22]:before,
+#label-23:checked ~ label[for=label-23]:before,
+#label-24:checked ~ label[for=label-24]:before,
+#label-25:checked ~ label[for=label-25]:before,
+#label-26:checked ~ label[for=label-26]:before,
+#label-27:checked ~ label[for=label-27]:before,
+#label-28:checked ~ label[for=label-28]:before,
+#label-29:checked ~ label[for=label-29]:before,
+#label-30:checked ~ label[for=label-30]:before{
+  background: url("/static/images/chk.png") no-repeat center center;
+}

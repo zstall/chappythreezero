@@ -333,20 +333,22 @@ def main():
     
     elif trace and num == '4':
 
-        """
-        daily_chores = ['clean kitchen', 'clean living room', 'clean upstairs', 'clean bathroom', 'dishes', 'clean basement', 'dinner', 'drop off maggie', 'pick up maggie']
-        weekly_chores = ['cut grass', 'vacuum', 'laundry', 'clean fridge', 'wash cars', 'get groceries']
-        """
-        org = 'kelly_house'
-        """
-        for ch in daily_chores:
-            c = Chore('',ch,'True', 'False','','','','','')
-            c.add_chore_to_db(org)
+        org = input('Please enter an Org Name: ')
 
-        for ch in weekly_chores:
-            c = Chore('',ch,'False', 'True','','','','','')
-            c.add_chore_to_db(org)
-        """
+        add_test_chores = (input("Would you like to add test chores? [y]/[n]: ")).lower()
+        if add_test_chores == 'y':
+              
+            daily_chores = ['clean kitchen', 'clean living room', 'clean upstairs', 'clean bathroom', 'dishes', 'clean basement', 'dinner', 'drop off maggie', 'pick up maggie']
+            weekly_chores = ['cut grass', 'vacuum', 'laundry', 'clean fridge', 'wash cars', 'get groceries']
+        
+            for ch in daily_chores:
+                c = Chore('',ch,'True', 'False','','','','','')
+                c.add_chore_to_db(org)
+
+            for ch in weekly_chores:
+                c = Chore('',ch,'False', 'True','','','','','')
+                c.add_chore_to_db(org)
+        
 
         query_org_id = ("SELECT org_id FROM orgs WHERE org_name = '" + org +"';")
         org_id = query_chappy(query_org_id)

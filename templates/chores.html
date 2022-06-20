@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Each Chappy chore will be represented as a task -->
+<div class="task">
+  <h1>CHAPPY</h1>
+  <h4>Get ya chores done</h4>
+  {% if user == 'admin' %}
+    <div class="card border-info mb-3">
+      <div class="card-header">
+        <h3>Admin - Tools</h3>
+          <form action="/admintools" method="POST">
+            <button type="submit" class="btn btn-primary">Reset Chores and Send Message</button>
+          </form>
+      </div>
+    </div>
+  {% endif %}
+  {% set counter = [1] %}
+  {% for name in chrs %}
+  <div class="card border-info mb-3">
+    <div class="card-header">
+      <h3>{{ name }} - Chores</h3>
+    </div>
+    <form action="/update" method="POST">
+    {% for chr in chrs[name] %}
+      <input id='label-{{ counter[0] }}' type="checkbox" name="chr" value="{{ chr }}"/>
+      <label for="label-{{ counter[0] }}">
+        <h5>
+          {{ chr }}
+          <span>{{ name }}</span>
+        </h5>
+      </label>
+      {% if counter.append(counter.pop() + 1) %}{% endif %}
+    {% endfor %}
+      <button type="submit" class="btn btn-danger btn-lg btn-block">Submit</button>
+    </form>
+  </div>
+  <div class="card border-info mb-3">
+    <div class="card-header">
+      <h3>{{ name }} - Completed Chores</h3>
+    </div>
+    <form action="/incomplete" method="POST">
+    {% for chr in dchrs[name] %}
+      <input id='label-{{ counter[0] }}' type="checkbox" name="chr" value="{{ chr }}"/>
+      <label for="label-{{ counter[0] }}">
+        <h5>
+          {{ chr }}
+          <span>{{ name }}</span>
+        </h5>
+      </label>
+      {% if counter.append(counter.pop() + 1) %}{% endif %}
+    {% endfor %}
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+    {% if counter.append(counter.pop() + 1) %}{% endif %}
+  {% endfor %}
+</div>
+{% endblock %}
