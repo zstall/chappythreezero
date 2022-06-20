@@ -25,15 +25,16 @@ CREATE TABLE users (
 );
 
 CREATE TABLE chores (
- 	chore_id INTEGER PRIMARY KEY,
+ 	chore_id uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
  	chore VARCHAR (255) NOT NULL,
 	schedule_daily BOOLEAN NOT NULL,
 	schedule_weekly BOOLEAN NOT NULL,
 	user_id VARCHAR (255),
-	org_id UUID NOT NULL,
+	org_id UUID,
 	chore_deleted BOOLEAN NOT NULL DEFAULT FALSE,
 	date_created TIMESTAMP NOT NULL,
 	date_updated TIMESTAMP NOT NULL,
+	done BOOLEAN NOT NULL DEFAULT FALSE,
 	CONSTRAINT org_fk
 		FOREIGN KEY(org_id)
 			REFERENCES orgs(org_id)
