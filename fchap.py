@@ -29,14 +29,15 @@ def login():
         if usr != 'Incorrect username or password':
             session['user'] = usr.username
             u = usr.user_id
-            return redirect(url_for('chores', u=u))
+    
+            return redirect(url_for('chores', usr=u))
     
     return render_template('login.html')
 
-@app.route('/chores/<u>', methods=['GET', 'POST'])
-def chores(u):
+@app.route('/chores/<usr>', methods=['GET', 'POST'])
+def chores(usr):
 
-    usr = chap.create_user_with_id(u)
+    usr = chap.create_user_with_id(usr)
 
     if usr.username == 'admin':
         completed_chores = chap.query_chappy("select u.username, c.chore from users u join chores c on u.user_id::varchar = c.user_id where c.done = 'True';")
@@ -73,8 +74,27 @@ def chores(u):
         for c in completed_chores:
             dchrs[usr.fname]+=c
         
-        return render_template('chores.html', chrs=chrs, dchrs=dchrs, user=session['user'])
+        return render_template('chores.html', chrs=chrs, dchrs=dchrs, user=usr.username)
     
+@app.route("/update", methods=['GET','POST'])
+def update_chores():
+    if request.method == 'POST':
+        chores = (request.form.getlist('chr'))
+        for c in chores:
+            chr = chap.create_chore(c)
+            chr.update_chore()
+        usr_id = chr.user_id
+        return redirect(url_for('chores', usr=usr_id))
+
+@app.route("/incomplete", methods=['GET', 'POST'])
+def incomplete_chores():
+    if request.method == 'POST':
+        chores = (request.form.getlist('chr'))
+        for c in chores:
+            chr = chap.create_chore(c)
+            chr.update_chore()
+        usr_id = chr.user_id
+        return redirect(url_for('chores',usr=usr_id))
 
 
 if __name__ == '__main__':

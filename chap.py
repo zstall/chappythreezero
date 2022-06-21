@@ -104,7 +104,7 @@ class Org:
             self.user_ids.append(user_id[0][0])
 
 class Chore:
-    def __init__(self, chore_id, chore, schedule_daily, schedule_weekly, user_id, org_id, chore_deleted, date_created, date_updated):
+    def __init__(self, chore_id, chore, schedule_daily, schedule_weekly, user_id, org_id, chore_deleted, date_created, date_updated, done):
         self.chore_id = chore_id
         self.chore = chore
         self.schedule_daily = schedule_daily
@@ -112,13 +112,14 @@ class Chore:
         self.user_id = user_id
         self.org_id = org_id
         self.chore_deleted = chore_deleted
+        self.done = done
 
     def add_chore_to_db(self,org_name):
         org_id_array = query_chappy("SELECT org_id FROM orgs WHERE org_name = '"+ org_name+"';")
         print(org_id_array)
         org_id = org_id_array[0][0]
         self.org_id = org_id
-        query = "INSERT INTO chores (chore, schedule_daily, schedule_weekly, org_id, date_created, date_updated) VALUES("+"'"+self.chore+"', '"+self.schedule_daily+"', '"+self.schedule_weekly+"', '"+self.org_id+"', current_timestamp, current_timestamp);"
+        query = "INSERT INTO chores (chore, schedule_daily, schedule_weekly, org_id, date_created, date_updated, done) VALUES("+"'"+self.chore+"', '"+self.schedule_daily+"', '"+self.schedule_weekly+"', '"+self.org_id+"', current_timestamp, current_timestamp, 'False');"
         query_chappy(query)
 
     def add_user_to_chore(self, user_name):
@@ -131,6 +132,11 @@ class Chore:
     def add_user_to_chore_user_id(self, user_id):
         self.user_id = user_id
         query = "UPDATE chores SET user_id = '"+self.user_id+"' WHERE chore_id = '" +self.chore_id+"';"
+        query_chappy(query)
+
+    def update_chore(self):
+        self.done = not(self.done)
+        query = "UPDATE chores set done = '" + str(self.done) + "' WHERE chore_id = '" + self.chore_id + "';"
         query_chappy(query)
 
 def query_chappy(query, trace=False):
@@ -220,7 +226,7 @@ def create_chore(chore_name):
         print("Chore does not exist")
         pass
     else:
-        create_chore = Chore(c[0][0],c[0][1],c[0][2],c[0][3],c[0][4],c[0][5],c[0][6],c[0][7],c[0][8])
+        create_chore = Chore(c[0][0],c[0][1],c[0][2],c[0][3],c[0][4],c[0][5],c[0][6],c[0][7],c[0][8],c[0][9])
         return create_chore
 
 def main():
