@@ -2,6 +2,7 @@ import chap
 import os
 import random
 import datetime
+from create_chappy_db import executeInserts
 from flask import Flask, request, render_template, session, redirect, g,url_for
 from flask_restful import Resource, Api
 
@@ -9,16 +10,39 @@ app = Flask(__name__)
 api = Api(app)
 app.secret_key = os.urandom(24)
 
+# This route clears any user info and sets the user and user_id when a user signs in.
 @app.before_request
 def before_request():
     g.user = None
+    g.password = None
+    g.user_id = None
 
+    # This is checking if a user is currently logged in, if so set g for user and user_id.
     if 'user' in session:
         g.user = session['user']
-
+        g.user_id = session['user_id']
+    
+        
+# main route def for home directory.        
 @app.route("/")
-def home(user_id = ''):
-    return render_template('index.html', user_id = user_id)
+def home():
+    return render_template('index.html')
+
+# logout route clears all user info for that session
+@app.route("/logout")
+def logout():
+    # Reset user and user_id
+    g.user = None
+    g.user_id = None
+    # remove user from session
+    session.pop('user', None)
+    return render_template('index.html')
+
+@app.route("/register", methods=['GET','POST'])
+def register():
+    #executeInserts(fname, lname, phone, email, username, crypt('password', gen_salt('bf', 8)), "current_timestamp, current_timestamp", admin, "False" )
+    return render_template('registration.html')
+
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -30,6 +54,7 @@ def login():
         try:
             session['user'] = usr.username
             session['user_id'] = usr.user_id
+            g.user = usr.user_id
             u = usr.user_id
             return redirect(url_for('chores', usr=u))
         except:

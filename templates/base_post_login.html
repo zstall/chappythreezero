@@ -39,7 +39,7 @@
         <ul class="navbar-nav mr-auto">
           <!-- CUSTOM NAVIGATION BARS -->
           <li class="nav-item">
-            <a class="nav-link" href={{ url_for('home') }}>Home<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href={{ url_for('home') }}>Home {{ g.user }}<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">About Chappy</a>
@@ -47,18 +47,12 @@
           <li class="nav-item">
             <a class="nav-link" target="_blank" href="http://zachstall.co">zachstall.co</a>
           </li>
-          {% if g.user!=None %}
-          <li class="nav-item" >
-            <a class="nav-link" href="/chores/{{ g.user_id }}">chores</a>
-          </li>
-          <li class="nav-item" >
-            <a class="nav-link" href="/logout">logout</a>
-          </li>
-          {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="/login">login</a>
+            <a class="nav-link" href={{ url_for('chores', usr = user_id)  }}></a>
           </li>
-          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="/login">logout</a>
+          </li>
         </ul>
       </div>
 </nav>
