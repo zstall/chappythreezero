@@ -34,7 +34,9 @@
         </label>
         {% if counter.append(counter.pop() + 1) %}{% endif %}
       {% endfor %}
-      <button type="submit" class="btn btn-outline-success btn-block m-2" >Submit</button>
+      <div class="m-1">
+        <button type="submit" class="btn btn-outline-primary btn-block" >Submit</button>
+      </div>
     </form>
   </div>
   <div class="card border-info mb-3">
@@ -52,7 +54,9 @@
       </label>
       {% if counter.append(counter.pop() + 1) %}{% endif %}
     {% endfor %}
-      <button type="submit" class="btn btn-outline-primary btn-lg btn-block">Submit</button>
+    <div class="m-1">
+      <button type="submit" class="btn btn-outline-warning btn-block">Submit</button>
+    </div>
     </form>
   </div>
     {% if counter.append(counter.pop() + 1) %}{% endif %}

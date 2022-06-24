@@ -82,8 +82,12 @@ def chores(usr):
         for nm in chores:
             chrs[nm[0]]+=[nm[1]]
 
+        #chrs={c:chrs[c] for c in chrs if chrs[c]}
+
         for nm in completed_chores:
             dchrs[nm[0]]+=[nm[1]]
+
+        #dchrs={c:dchrs[c] for c in dchrs if dchrs[c]}  
 
         return render_template('chores.html', chrs=chrs, dchrs=dchrs, user=usr.username, user_id=usr_id)      
 
