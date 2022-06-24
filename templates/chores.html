@@ -12,17 +12,17 @@
       <div class="card-header">
         <h3>Admin - Tools {{ user }}</h3>
           <form action="/admintools" method="POST">
-            <button type="submit" class="btn btn-outline-primary">Reset Chores and Send Message</button>
+            <button type="submit" class="btn btn-outline-primary btn-block">Reset Chores and Send Message</button>
           </form>
       </div>
     </div>
   {% endif %}
   {% set counter = [1] %}
   {% for name in chrs %}
-    <div class="card border-info mb-3">
-      <div class="card-header">
-        <h3>{{ name }} - Chores</h3>
-      </div>
+  <div class="card border-info mb-3">
+    <div class="card-header">
+      <h3>{{ name }} - Chores</h3>
+    </div>
       <form action="/update" method="POST">
       {% for chr in chrs[name] %}
         <input id='label-{{ counter[0] }}' type="checkbox" name="chr" value="{{ chr }}"/>
@@ -34,7 +34,7 @@
         </label>
         {% if counter.append(counter.pop() + 1) %}{% endif %}
       {% endfor %}
-      <button type="submit" class="btn btn-outline-primary btn-lg btn-block">Submit</button>
+      <button type="submit" class="btn btn-outline-success btn-block m-2" >Submit</button>
     </form>
   </div>
   <div class="card border-info mb-3">

@@ -213,7 +213,7 @@ a{
   color: #333;
 }
 a:hover{
-  color: #da5767;
+  color: #d1da57;
   text-decoration: none;
 }
 
@@ -233,7 +233,7 @@ a:hover{
 
     color: #000000;
     background-color: #ffffff;
-    border: 3px solid #da5767;
+    border: 3px solid #d1da57;
     outline: 0;
     box-shadow: none;
 
