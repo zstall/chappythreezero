@@ -2,19 +2,51 @@
 
 {% block content %}
 
-<form class="" action="/registratoin" method="post">
-    <input type="text" name="username" placehodler="username" required><br>
-    <input type="password" name="password" placeholder="passsword" required><br>
-    <input type="text" name="phone" placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"><br> 
-    <input type="email" name="email" placeholder="email@noreply.com"><br>
-    <input type="text" name="fname" placeholder="first name"><br>
-    <input type="text" name="lname" placeholder="last name"><br>
-    <label for="org_id">If you have an Org id enter it here (Note: if you are joining an org, you can NOT make yourself and admin. Contact the org creater):</label>
-    <input type="text" name="org_id">
-    <label>Admin (Note: if joining an org, you can not make yourself an admin): </label><br>
-    <input type="checkbox" name="admin">
-  <input type="password" name="password" required>
-  <input type="submit"/>
-</form>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div class="rcard">
+      <h2 class="card-title text-center">Register for <a href="/">Chappy</a></h2>
+      <div class="card-body py-md-4">
+        <form _lpchecked="1" action="/registration" method="post">
+          <div class="form-group">
+             <input type="text" name="fname" class="form-control" id="name" placeholder="First Name">
+          </div>
+          <div class="form-group">
+            <input type="text" name="lname" class="form-control" id="name" placeholder="Last Name">
+         </div>
+          <div class="form-group">
+            <input type="text" name="username" class="form-control" id="name" placeholder="username">
+          </div>
+          <div class="form-group">
+             <input type="email" name = "email" class="form-control" id="email" placeholder="Email">
+          </div>
+          <div class="form-group">
+            <input type="text" name="phone" class="form-control" id="name" placeholder="phone: 555-555-5555" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}">
+          </div>
+          <div class="form-group">
+            <input type="text" name="org_id" class="form-control" id="name" placeholder="Joining an Org (optional) Org id">
+          </div>
+          <div class="form-group">
+            <input type="text" name="admin" class="form-control" id="name" placeholder="Admin? [y]/[n]">
+          </div>
+          <div class="form-group">
+            <input type="text" name="org_name" class="form-control" id="name" placeholder="New Org (Optional)? Org Name">
+          </div>
+          <div class="form-group">
+            <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" id="confirm-password" placeholder="confirm-password">
+          </div>
+          <div class="d-flex flex-row align-items-center justify-content-between">
+            <a href="/login">Login</a><input type="submit" class="btn btn-primary">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
 
 {% endblock %}

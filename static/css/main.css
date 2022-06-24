@@ -2,6 +2,8 @@
 /* ----- Imports ----- */
 @import url(https://fonts.googleapis.com/css?family=Lato);
 @import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css);
+@import url(https://fonts.googleapis.com/css?family=PT+Sans);
+
 
 /* tiny reset */
 html, body {
@@ -12,8 +14,8 @@ html, body {
 }
 /* body */
 body{
-  background: #FFB52E;
-  font-family: sans-serif;
+  background: #FFF;
+  font-family: 'PT Sans', sans-serif;
 }
 /* title */
 h1, h4 {
@@ -128,7 +130,7 @@ label:before{
 #label-30:checked ~ label[for=label-30]{
   background: #fff;
   border-bottom: 1px solid #00CDFF;
-  color: #DF362D;
+  
 }
 #label-0:checked ~ label[for=label-0] h2 span,
 #label-1:checked ~ label[for=label-1] h2 span,
@@ -161,7 +163,8 @@ label:before{
 #label-28:checked ~ label[for=label-28] h2 span,
 #label-29:checked ~ label[for=label-29] h2 span,
 #label-30:checked ~ label[for=label-30] h2 span{
-  color: #DF362D;
+  background: #fff;
+  border-bottom: 1px solid #00CDFF;
 }
 #label-0:checked ~ label[for=label-0]:before,
 #label-1:checked ~ label[for=label-1]:before,
@@ -195,4 +198,56 @@ label:before{
 #label-29:checked ~ label[for=label-29]:before,
 #label-30:checked ~ label[for=label-30]:before{
   background: url("/static/images/chk.png") no-repeat center center;
+}
+
+
+
+
+
+
+
+h2{
+  padding-top: 1.5rem;
+}
+a{
+  color: #333;
+}
+a:hover{
+  color: #da5767;
+  text-decoration: none;
+}
+
+.rcard{
+  border: 0.40rem solid #f8f9fa;
+  top: 10%;
+}
+
+.form-control{
+  background-color: #f8f9fa;
+  padding: 20px;
+  padding: 25px 15px;
+  margin-bottom: 1.3rem;
+}
+
+.form-control:focus {
+
+    color: #000000;
+    background-color: #ffffff;
+    border: 3px solid #da5767;
+    outline: 0;
+    box-shadow: none;
+
+}
+
+.btn{
+  padding: 0.6rem 1.2rem;
+
+}
+.btn-primary:hover {
+
+    
+    background-color: #df8c96;
+    border-color: #df8c96;
+  transition: .3s;
+
 }

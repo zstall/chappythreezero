@@ -12,7 +12,7 @@
       <div class="card-header">
         <h3>Admin - Tools {{ user }}</h3>
           <form action="/admintools" method="POST">
-            <button type="submit" class="btn btn-primary">Reset Chores and Send Message</button>
+            <button type="submit" class="btn btn-outline-primary">Reset Chores and Send Message</button>
           </form>
       </div>
     </div>
@@ -34,7 +34,7 @@
         </label>
         {% if counter.append(counter.pop() + 1) %}{% endif %}
       {% endfor %}
-      <button type="submit" class="btn btn-danger btn-lg btn-block">Submit</button>
+      <button type="submit" class="btn btn-outline-primary btn-lg btn-block">Submit</button>
     </form>
   </div>
   <div class="card border-info mb-3">
@@ -52,7 +52,7 @@
       </label>
       {% if counter.append(counter.pop() + 1) %}{% endif %}
     {% endfor %}
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-outline-primary btn-lg btn-block">Submit</button>
     </form>
   </div>
     {% if counter.append(counter.pop() + 1) %}{% endif %}

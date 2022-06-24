@@ -1,11 +1,34 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<!--
 <form class="" action="/login" method="post">
   <input type="text" name="user" placeholder="username" required></input>
   <input type="password" name="password" placeholder="password" required>
   <input type="submit"/>
 </form>
+-->
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div class="rcard">
+      <h2 class="card-title text-center">Register for <a href="/">Chappy</a></h2>
+      <div class="card-body py-md-4">
+        <form _lpchecked="1" action="/login" method="post">
+          <div class="form-group">
+             <input type="text" name="user" class="form-control" id="name" placeholder="Username">
+          </div>
+          <div class="form-group">
+            <input type="password" name="password" class="form-control" id="name" placeholder="Password">
+         </div>
+          <div class="d-flex flex-row align-items-center justify-content-between">
+            <a href="/register">Login</a><input type="submit" class="btn btn-primary"/>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
 
 {% endblock %}
