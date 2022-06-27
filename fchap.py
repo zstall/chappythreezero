@@ -94,7 +94,31 @@ def chores(usr):
     if usr.admin == True:
         completed_chores = chap.query_chappy("select u.username, c.chore from users u join chores c on u.user_id::varchar = c.user_id where c.done = 'True';")
         chores = chap.query_chappy("select u.username, c.chore from users u join chores c on u.user_id::varchar = c.user_id where c.done = 'False';")
-        names = chap.query_chappy("select username from users where username <> 'admin' ;")
+        names = chap.query_chappy("select username from users where username <> 'admin' and org_ids = '{"+str(usr.org_ids[0])+"}';")
+
+        chrs = {}
+        dchrs = {}
+
+        for nm in names:
+            chrs[nm[0]]=[]
+            dchrs[nm[0]]=[]
+        
+        for nm in chores:
+            chrs[nm[0]]+=[nm[1]]
+
+        #chrs={c:chrs[c] for c in chrs if chrs[c]}
+
+        for nm in completed_chores:
+            dchrs[nm[0]]+=[nm[1]]
+
+        #dchrs={c:dchrs[c] for c in dchrs if dchrs[c]}  
+
+        return render_template('chores.html', chrs=chrs, dchrs=dchrs, user=usr.username, user_id=usr_id, u=usr)      
+
+    elif usr.super_user == True:
+        completed_chores = chap.query_chappy("select u.username, c.chore from users u join chores c on u.user_id::varchar = c.user_id where c.done = 'True';")
+        chores = chap.query_chappy("select u.username, c.chore from users u join chores c on u.user_id::varchar = c.user_id where c.done = 'False';")
+        names = chap.query_chappy("select username from users where username <> 'admin';")
 
         chrs = {}
         dchrs = {}
@@ -113,7 +137,7 @@ def chores(usr):
 
         #dchrs={c:dchrs[c] for c in dchrs if dchrs[c]}  
 
-        return render_template('chores.html', chrs=chrs, dchrs=dchrs, user=usr.username, user_id=usr_id)      
+        return render_template('chores.html', chrs=chrs, dchrs=dchrs, user=usr.username, user_id=usr_id, u=usr)      
 
     else:
         completed_chores = chap.query_chappy("SELECT chore FROM chores WHERE user_id = '" + usr.user_id + "' AND done = 'True';")
@@ -130,7 +154,7 @@ def chores(usr):
         for c in completed_chores:
             dchrs[usr.fname]+=c
         
-        return render_template('chores.html', chrs=chrs, dchrs=dchrs, user=usr.username)
+        return render_template('chores.html', chrs=chrs, dchrs=dchrs, user=usr.username, u=usr)
     
 @app.route("/update", methods=['GET','POST'])
 def update_chores():

@@ -7,10 +7,10 @@
 <div class="task">
   <h1>CHAPPY</h1>
   <h4>Get ya chores done</h4>
-  {% if user == 'admin' %}
+  {% if u.user_admin or u.user_super_user %}
     <div class="card border-info mb-3">
       <div class="card-header">
-        <h3>Admin - Tools {{ user }}</h3>
+        <h3>Admin - Tools {{ u.username }}</h3>
           <form action="/admintools" method="POST">
             <button type="submit" class="btn btn-outline-primary btn-block">Reset Chores and Send Message</button>
           </form>

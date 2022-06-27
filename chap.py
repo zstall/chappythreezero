@@ -88,13 +88,6 @@ class Org:
     def assign_users(self, user_name):
         user_id = query_chappy("SELECT user_id FROM users WHERE username = '" + user_name +"';")
 
-        print(user_id)
-        input('user id good')
-        print(user_id[0][0])
-        input('user array good?')
-        print(self.org_id)
-        input("org id good?")
-        
         if self.user_ids == None:
             query_chappy("UPDATE orgs SET user_ids = user_ids || '{\"" + user_id[0][0] + "\"}' where org_id = '" + self.org_id + "';")
             query_chappy("UPDATE users SET org_ids = org_ids || '{\"" + self.org_id + "\"}' where user_id = '" + user_id[0][0] + "';")
@@ -196,7 +189,7 @@ def create_user(username, password):
     """ Given a username and password query the db to see if that user exists. If so 
         create a user"""
     u = query_chappy("select * from users where username = '" + username + "' and password = crypt('" +password +"',password);")
-    
+
     if u == '':
         print("Incorrect username or password")
         pass
@@ -208,7 +201,8 @@ def create_user(username, password):
         return created_user
 
 def create_user_with_id(id):
-    u = query_chappy("select * from users where user_id = '" + id +"';")
+
+    u = query_chappy("select * from users where user_id = '" + id +"';")    
     new_user = User(u[0][0],u[0][1],u[0][2],u[0][3],u[0][4],u[0][5],u[0][6],u[0][7],u[0][8],u[0][9],u[0][10],u[0][11],u[0][12])
     return new_user
 
@@ -256,7 +250,6 @@ def main():
         all_users =[]
         for u in the_users:
             if(u[5] == 'admin'):
-                print("are we doing this?")
                 all_users.append(create_user(u[5],'admin'))
             else:
                 all_users.append(create_user(u[5],'password'))
@@ -351,6 +344,10 @@ def main():
 
         org = input('Please enter an Org Name: ')
 
+        o = Org('', org, '', '{}', False, '')
+        o.add_org_to_db()
+        o = create_org(org)
+
         add_test_chores = (input("Would you like to add test chores? [y]/[n]: ")).lower()
         if add_test_chores == 'y':
               
@@ -358,11 +355,11 @@ def main():
             weekly_chores = ['cut grass', 'vacuum', 'laundry', 'clean fridge', 'wash cars', 'get groceries']
         
             for ch in daily_chores:
-                c = Chore('',ch,'True', 'False','','','','','')
+                c = Chore('',ch,'True', 'False','','','','','','False')
                 c.add_chore_to_db(org)
 
             for ch in weekly_chores:
-                c = Chore('',ch,'False', 'True','','','','','')
+                c = Chore('',ch,'False', 'True','','','','','', 'False')
                 c.add_chore_to_db(org)
         
 
