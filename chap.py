@@ -53,8 +53,8 @@ class User:
         """
         # get the unique org from the db
         org_id = query_chappy("SELECT org_id FROM orgs WHERE org_name = '" + org + "';")
-    
-        # if no org, add it directory
+        print(org_id)
+        # if no org, add it directly
         if self.org_ids == None:
             query_chappy("UPDATE orgs SET user_ids = user_ids || '{\"" + self.user_id + "\"}' WHERE org_id = '" + org_id[0][0] + "';")
             query_chappy("UPDATE users SET org_ids = org_ids || '{\"" + org_id[0][0] + "\"}' where user_id = '" + self.user_id + "';")
@@ -70,7 +70,7 @@ class User:
             query_chappy("UPDATE users SET org_ids = org_ids || '{\"" + org_id[0][0] + "\"}' where user_id = '" + self.user_id + "';")
             query_chappy("UPDATE users SET date_updated = current_timestamp WHERE user_id = '" + self.user_id + "';")
             query_chappy("UPDATE orgs SET date_updated = current_timestamp WHERE org_id = '" + org_id[0][0] + "';")
-            self.org_ids.append(org_id[0][0])
+            self.org_ids+= (", " + (org_id[0][0]))
 
 class Org:
     def __init__(self, org_id, org_name, date_created, user_ids, org_deleted, date_udpated):
@@ -88,6 +88,13 @@ class Org:
     def assign_users(self, user_name):
         user_id = query_chappy("SELECT user_id FROM users WHERE username = '" + user_name +"';")
 
+        print(user_id)
+        input('user id good')
+        print(user_id[0][0])
+        input('user array good?')
+        print(self.org_id)
+        input("org id good?")
+        
         if self.user_ids == None:
             query_chappy("UPDATE orgs SET user_ids = user_ids || '{\"" + user_id[0][0] + "\"}' where org_id = '" + self.org_id + "';")
             query_chappy("UPDATE users SET org_ids = org_ids || '{\"" + self.org_id + "\"}' where user_id = '" + user_id[0][0] + "';")
@@ -101,7 +108,7 @@ class Org:
             query_chappy("UPDATE users SET org_ids = org_ids || '{\"" + self.org_id + "\"}' where user_id = '" + user_id[0][0] + "';")
             query_chappy("UPDATE users SET date_updated = current_timestamp WHERE user_id = '" + user_id[0][0] + "';")
             query_chappy("UPDATE orgs SET date_updated = current_timestamp WHERE org_id = '" + self.org_id + "';")
-            self.user_ids.append(user_id[0][0])
+            self.user_ids+= (", " + (user_id[0][0]))
 
 class Chore:
     def __init__(self, chore_id, chore, schedule_daily, schedule_weekly, user_id, org_id, chore_deleted, date_created, date_updated, done):
@@ -308,10 +315,13 @@ def main():
 
         for u in usr:
             o.assign_users(u)
+        
 
         print("Org: " + o.org_name)
         print("Org Id: " + o.org_id)
         print("Assigned users: ")
+        
+        o = create_org(org_n)
         print(o.user_ids)
 
         

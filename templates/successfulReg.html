@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+<div class=container>
+  <div class="row">
+    <div class="col-4">
+        <img src="/static/images/chap.jpg" alt="">
+    </div>
+    <div class="col-8">
+        <h2>Successful registration user: {{ u.username }}!</h2>
+        <h4>You have successfully registered for Chappy!</h4>
+        {% if o.org_id is none %}
+    </div>
+  </div>
+</div>
+        {% else %}
+        <p>Here is your org_id for {{ o.org_name }}</p>
+        <p>Save this id. This is what you will give people to register to your org</p>
+        <p>Org id: {{ o.org_id }}</p>
+        {% endif %}
+    </div>
+  </div>
+</div>
+ 
+{% endblock %}

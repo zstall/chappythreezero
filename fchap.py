@@ -40,7 +40,31 @@ def logout():
 
 @app.route("/register", methods=['GET','POST'])
 def register():
-    #executeInserts(fname, lname, phone, email, username, crypt('password', gen_salt('bf', 8)), "current_timestamp, current_timestamp", admin, "False" )
+    if request.method == 'POST':
+            
+        # Create a new user and add them to the DB to generate user_id and crypt password
+
+        admin = ('admin'.lower() == 'y')
+
+        u = chap.User('',str(request.form['fname']),str(request.form['lname']),str(request.form['phone']),str(request.form['email']),str(request.form['username']),str(request.form['password']),'{}','','',str(admin),'False','False')
+        u.add_user_to_db(u.password)
+        u = chap.create_user(u.username, u.password)
+        o = "None"
+
+        if len(str(request.form['org_name'])) > 0:
+            o = chap.Org('',str(request.form['org_name']),'','{}','False','')
+            o.add_org_to_db()
+            o = chap.create_org(o.org_name)
+            o.assign_users(u.username)
+            u.assign_org(o.org_name)
+
+            o = chap.create_org(o.org_name)
+            u = chap.create_user_with_id(u.user_id)
+
+        return render_template('successfulReg.html', o=o, u=u)
+        
+
+    
     return render_template('registration.html')
 
 
