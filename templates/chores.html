@@ -7,7 +7,7 @@
 <div class="task">
   <h1>CHAPPY</h1>
   <h4>Get ya chores done</h4>
-  {% if u.user_admin or u.user_super_user %}
+  {% if u.admin or u.super_user %}
     <div class="card border-info mb-3">
       <div class="card-header">
         <h3>Admin - Tools {{ u.username }}</h3>
@@ -22,6 +22,7 @@
   <div class="card border-info mb-3">
     <div class="card-header">
       <h3>{{ name }} - Chores</h3>
+      <h5></h5>
     </div>
       <form action="/update" method="POST">
       {% for chr in chrs[name] %}
@@ -29,7 +30,7 @@
         <label for="label-{{ counter[0] }}">
           <h5>
             {{ chr }}
-            <span>{{ name }}</span>
+            <span>org_id: {{ o[chr][0] }}</span>
           </h5>
         </label>
         {% if counter.append(counter.pop() + 1) %}{% endif %}
@@ -49,7 +50,7 @@
       <label for="label-{{ counter[0] }}">
         <h5>
           {{ chr }}
-          <span>{{ name }}</span>
+          <span>org_id: {{ o[chr][0] }}</span>
         </h5>
       </label>
       {% if counter.append(counter.pop() + 1) %}{% endif %}

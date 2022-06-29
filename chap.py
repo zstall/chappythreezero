@@ -218,6 +218,18 @@ def create_org(org_name):
         create_org = Org(o[0][0],o[0][1],o[0][2],o[0][3],o[0][4],o[0][5])
         return create_org
 
+def create_org_with_id(org_id):
+    o = query_chappy("select * from orgs where org_id = '" + org_id + "';")
+    if o == '':
+        print("Incorrect org name")
+        pass
+    elif o == []:
+        print("Incorrect org name")
+        pass
+    else:
+        create_org = Org(o[0][0],o[0][1],o[0][2],o[0][3],o[0][4],o[0][5])
+        return create_org
+
 def create_chore(chore_name):
     c = query_chappy("select * from chores where chore = '" + chore_name + "';")
     if c == '':

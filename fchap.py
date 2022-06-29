@@ -44,7 +44,7 @@ def register():
             
         # Create a new user and add them to the DB to generate user_id and crypt password
 
-        admin = ('admin'.lower() == 'y')
+        admin = (request.form['admin'].lower() == 'y')
 
         u = chap.User('',str(request.form['fname']),str(request.form['lname']),str(request.form['phone']),str(request.form['email']),str(request.form['username']),str(request.form['password']),'{}','','',str(admin),'False','False')
         u.add_user_to_db(u.password)
@@ -60,6 +60,13 @@ def register():
 
             o = chap.create_org(o.org_name)
             u = chap.create_user_with_id(u.user_id)
+
+        elif len(str(request.form['org_id'])) > 0:
+            o = chap.create_org_with_id(str(request.form['org_id']))
+            o.assign_users(u.username)
+            u.assign_org(o.org_name)
+
+
 
         return render_template('successfulReg.html', o=o, u=u)
         
@@ -92,19 +99,26 @@ def chores(usr):
     usr_id = usr.user_id
 
     if usr.admin == True:
-        completed_chores = chap.query_chappy("select u.username, c.chore from users u join chores c on u.user_id::varchar = c.user_id where c.done = 'True';")
-        chores = chap.query_chappy("select u.username, c.chore from users u join chores c on u.user_id::varchar = c.user_id where c.done = 'False';")
-        names = chap.query_chappy("select username from users where username <> 'admin' and org_ids = '{"+str(usr.org_ids[0])+"}';")
+
+        completed_chores = chap.query_chappy("select u.username, c.chore from users u join chores c on u.user_id::varchar = c.user_id where c.done = 'True' and '"+str(usr.org_ids[0])+"' = ANY(u.org_ids);")
+        chores = chap.query_chappy("select u.username, c.chore from users u join chores c on u.user_id::varchar = c.user_id where c.done = 'False' and '"+str(usr.org_ids[0])+"' = ANY(u.org_ids);")
+        names = chap.query_chappy("select username from users where username <> 'admin' and '"+str(usr.org_ids[0])+"' = ANY(org_ids);")
+        orgs = usr.org_ids
 
         chrs = {}
         dchrs = {}
+        dorgs = {}
 
+    
         for nm in names:
             chrs[nm[0]]=[]
             dchrs[nm[0]]=[]
         
+
         for nm in chores:
             chrs[nm[0]]+=[nm[1]]
+            dorgs[nm[1]]=orgs
+        
 
         #chrs={c:chrs[c] for c in chrs if chrs[c]}
 
@@ -113,19 +127,24 @@ def chores(usr):
 
         #dchrs={c:dchrs[c] for c in dchrs if dchrs[c]}  
 
-        return render_template('chores.html', chrs=chrs, dchrs=dchrs, user=usr.username, user_id=usr_id, u=usr)      
+        return render_template('chores.html', chrs=chrs, dchrs=dchrs, user=usr.username, user_id=usr_id, u=usr, o=dorgs)      
 
     elif usr.super_user == True:
         completed_chores = chap.query_chappy("select u.username, c.chore from users u join chores c on u.user_id::varchar = c.user_id where c.done = 'True';")
         chores = chap.query_chappy("select u.username, c.chore from users u join chores c on u.user_id::varchar = c.user_id where c.done = 'False';")
         names = chap.query_chappy("select username from users where username <> 'admin';")
+        orgs = chap.query_chappy("select c.chore, c.org_id from users u join chores c on u.user_id::varchar = c.user_id;")
 
         chrs = {}
         dchrs = {}
+        dorgs = {}
         
         for nm in names:
             chrs[nm[0]]=[]
             dchrs[nm[0]]=[]
+        
+        for c in orgs:
+            dorgs[c[0]]=[c[1]]
         
         for nm in chores:
             chrs[nm[0]]+=[nm[1]]
@@ -137,14 +156,17 @@ def chores(usr):
 
         #dchrs={c:dchrs[c] for c in dchrs if dchrs[c]}  
 
-        return render_template('chores.html', chrs=chrs, dchrs=dchrs, user=usr.username, user_id=usr_id, u=usr)      
+
+        return render_template('chores.html', chrs=chrs, dchrs=dchrs, user=usr.username, user_id=usr_id, u=usr, o=dorgs)      
 
     else:
         completed_chores = chap.query_chappy("SELECT chore FROM chores WHERE user_id = '" + usr.user_id + "' AND done = 'True';")
         chores = chap.query_chappy("SELECT chore FROM chores WHERE user_id = '" + usr.user_id + "' AND done = 'False';")
+        orgs = chap.query_chappy("select c.chore, c.org_id from users u join chores c on u.user_id::varchar = c.user_id where u.user_id = '"+usr.user_id+"';")
 
         chrs = {}
         dchrs = {}
+        dorgs = {}
 
         chrs[usr.fname]=[]
         dchrs[usr.fname]=[]
@@ -153,8 +175,11 @@ def chores(usr):
             chrs[usr.fname]+=c
         for c in completed_chores:
             dchrs[usr.fname]+=c
-        
-        return render_template('chores.html', chrs=chrs, dchrs=dchrs, user=usr.username, u=usr)
+        for c in orgs:
+            dorgs[c[0]]=usr.org_ids
+
+
+        return render_template('chores.html', chrs=chrs, dchrs=dchrs, user=usr.username, user_id=usr_id, u=usr, o=dorgs)
     
 @app.route("/update", methods=['GET','POST'])
 def update_chores():
@@ -177,6 +202,7 @@ def incomplete_chores():
         usr_id = session.get('user_id', None)
 
         return redirect(url_for('chores', usr=usr_id))
+        
 
 @app.route("/admintools", methods=['GET', 'POST'])
 def run_chappy():

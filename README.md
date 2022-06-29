@@ -29,6 +29,14 @@ User Page (create a user page):
 - this is where users can see personal info
 - Join organizations (if they have an ID)
 - If admin, can see users and org ids
+- Can leave orgs
+- If admin, remove users
 
 CHores:
 - differentiate between super user and admin user. IE, admin should only see their org, super user (reserved for support and chappy admin) can see ALL orgs
+
+Admin Page:
+- Add/invite users
+- Add orgs reveal org ids
+- add users to orgs
+- updating chores does it for super user even if you are admin of one org
