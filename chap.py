@@ -6,7 +6,7 @@ Date: 9/13/2020
 Description: The start of chore app. Using a sqlite db, and hopefully a flask,
 this application will allow a user to get randomly selected chores assigned to
 them daily, weekly, and monthly.
-Testing Github Webhook.
+Testing Github Webhook number 2.
 This particular file is a collection of functions to access and update the DB.
 """
 
