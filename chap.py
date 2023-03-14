@@ -13,7 +13,7 @@ This particular file is a collection of functions to access and update the DB.
 # Download the helper library from https://www.twilio.com/docs/python/install
 #from logging.config import _OptionalDictConfigArgs
 #from urllib.parse import quote_from_bytes
-from twilio.rest import Client
+#from twilio.rest import Client
 import csv
 import datetime
 import random
@@ -231,7 +231,23 @@ def create_org_with_id(org_id):
         return create_org
 
 def create_chore(chore_name):
-    c = query_chappy("select * from chores where chore = '" + chore_name + "';")
+    chore = chore_name.lower()
+    c = query_chappy("select * from chores where chore = '" + chore + "';")
+    if c == '':
+        print("Chore does not exist")
+        pass
+    elif c == []:
+        print("Chore does not exist")
+        pass
+    else:
+        create_chore = Chore(c[0][0],c[0][1],c[0][2],c[0][3],c[0][4],c[0][5],c[0][6],c[0][7],c[0][8],c[0][9])
+        print(create_chore.chore, file=sys.stderr)
+        return create_chore
+
+def create_chore_with_user_name(chore_name, user_name):
+    chore = chore_name.lower()
+    user_id = query_chappy("select user_id from users where username = '" + user_name + "';")
+    c = query_chappy("select * from chores where chore = '" + chore + "' and user_id = '" + user_id[0][0] +"';")
     if c == '':
         print("Chore does not exist")
         pass
@@ -241,6 +257,7 @@ def create_chore(chore_name):
     else:
         create_chore = Chore(c[0][0],c[0][1],c[0][2],c[0][3],c[0][4],c[0][5],c[0][6],c[0][7],c[0][8],c[0][9])
         return create_chore
+
 
 def main():
 
@@ -253,6 +270,7 @@ def main():
         print("[2] Add org in the console")
         print("[3] Add chores in the console")
         print("[4] Set up a single org with chores")
+        print("[5] Debugging Chore Problem")
 
         num = input("Enter a number: ")
 
@@ -271,6 +289,16 @@ def main():
             print(u.username)
     
     # Testing the user class
+
+
+    if trace and num == '5':
+        
+        query_org_users = ("SELECT user_id FROM users WHERE 'fd268497-0bea-4d04-bd8d-11669d6bf027' = ANY(org_ids);")
+        lst = query_chappy(query_org_users)
+        print(lst)
+        lst.remove(('0a7c6286-fcab-4e19-a7a9-c5c24e926a2c',))
+        print(lst)
+
     if trace and num == '1':
         print("Add a new user")
         fname = input("Enter First Name: ")

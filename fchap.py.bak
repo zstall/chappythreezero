@@ -1,55 +1,14 @@
-import ddtrace.bootstrap.sitecustomize
 import chap
 import os
 import random
 import datetime
-from ddtrace import patch_all, config, tracer
-from ddtrace import patch; patch(logging=True)
 from create_chappy_db import executeInserts
 from flask import Flask, request, render_template, session, redirect, g,url_for
 from flask_restful import Resource, Api
-from datetime import datetime
-import logging
-import json_log_formatter
-import threading
-
 
 app = Flask(__name__)
 api = Api(app)
 app.secret_key = os.urandom(24)
-
-patch_all()
-config.flask['service_name'] = 'zstall-chappy-ubuntu'
-config.chore['service_name'] = 'chore-service'
-config.python['service_name'] = 'zstall-login'
-ddtrace.config.flask['service_name']='apm-chappy-service'
-
-chore_formatter = json_log_formatter.JSONFormatter()
-chore_json_handler = logging.FileHandler(filename='/var/log/chore/chore-log.json')
-chore_json_handler.setFormatter(chore_formatter)
-chore_logger = logging.getLogger('chore_json')
-#chore_logger = logging.getLogger(__name__)
-chore_logger.addHandler(chore_json_handler)
-chore_logger.setLevel(logging.INFO)
-
-formatter = json_log_formatter.JSONFormatter()
-json_handler = logging.FileHandler(filename='/var/log/flask/zstall-log.json')
-json_handler.setFormatter(formatter)
-logger = logging.getLogger('zstall_json')
-#logger = logging.getLogger(__name__)
-logger.addHandler(json_handler)
-logger.setLevel(logging.INFO)
-
-
-
-#FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] [dd.service=%(dd.service)s dd.env=%(dd.env)s dd.version=%(dd.version)s dd.trace_id=%(dd.trace_id)s dd.span_id=%(dd.span_id)s] - %(message)s')
-
-FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
-          '[dd.env=%(dd.env)s dd.version=%(dd.version)s dd.trace_id=%(dd.trace_id)s dd.span_id=%(dd.span_id)s] '
-          '- %(message)s')
-
-logging.basicConfig(format=FORMAT)
-
 
 # This route clears any user info and sets the user and user_id when a user signs in.
 @app.before_request
@@ -115,29 +74,9 @@ def register():
     
     return render_template('registration.html')
 
-@tracer.wrap(name='login')
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-    now = datetime.now()
-    zstall_thread= threading.currentThread().getName()
-    logger.info('zstall-login ' + str(now) + 'a user just attempted to login.',
-        extra={
-            'dd.service': 'login-log',
-            'job_category': 'login_function',
-            'logger.name': 'zstall_json',
-            'logger.service': 'zstall-login',
-            'logger.thread_name' : 'zstall_thread',
-            'logger.thread_msg' : 'Why wont this work, maw gawd!',
-            'request_time': str(now)
-        }
-    )
-    with tracer.trace("zstall_login_trace") as span:
-        # Designate this span as a separate service:
-        span.service="zstall_login_service"
-        # Add metadata:
-        span.set_tag('service_type','zstall_login_service')
-
-
     if request.method == 'POST':
         session.pop('user', None)
 
@@ -148,39 +87,18 @@ def login():
             session['user_id'] = usr.user_id
             g.user = usr.user_id
             u = usr.user_id
-            return redirect(url_for('chores', usr=u))
+            return redirect(url_for('chores', usr=u, _external=True))
         except:
             return render_template('login.html')
     return render_template('login.html')
 
-@tracer.wrap(name='chore')
 @app.route('/chores/<usr>', methods=['GET', 'POST'])
 def chores(usr):
-    now = datetime.now()
-    
+
     usr = chap.create_user_with_id(usr)
     usr_id = usr.user_id
-    chore_thread= threading.currentThread().getName()
-    chore_logger.info('chappy-chores ' + str(now) + ' this fooo('+str(usr.username)+') trying to do chores',
-            extra={
-            'dd.service': 'chore-log',     
-            'job_category': 'chore_function',
-            'logger.name': 'chore_json',
-            'logger.service': 'chore-service',
-            'logger.thread_name' : 'chore_thread',
-            'logger.thread_msg' : 'Yo, chore user is: ' + str(usr.username),
-            'request_time': str(now)    
-                }
-            )
-    with tracer.trace("chappy_chore_trace") as span:
-       # Designate this span as a separate service:
-       span.service="chappy_chore_service"
-       # Add metadata:
-       span.set_tag('service_type','chappy_chore_service')
 
-
-    if usr.admin == True:
-
+    if usr.admin == True and usr.super_user == False:
         completed_chores = chap.query_chappy("select u.username, c.chore from users u join chores c on u.user_id::varchar = c.user_id where c.done = 'True' and '"+str(usr.org_ids[0])+"' = ANY(u.org_ids);")
         chores = chap.query_chappy("select u.username, c.chore from users u join chores c on u.user_id::varchar = c.user_id where c.done = 'False' and '"+str(usr.org_ids[0])+"' = ANY(u.org_ids);")
         names = chap.query_chappy("select username from users where username <> 'admin' and '"+str(usr.org_ids[0])+"' = ANY(org_ids);")
@@ -265,25 +183,22 @@ def chores(usr):
 @app.route("/update", methods=['GET','POST'])
 def update_chores():
     if request.method == 'POST':
-        usr_id = session.get('user_id', None)
-        usr_chore_name = (request.form.get('user'))
         chores = (request.form.getlist('chr'))
-        for c in chores:
-            chr = chap.create_chore_with_user_name(c, usr_chore_name)
-            chr.update_chore()
 
+        for c in chores:
+            chr = chap.create_chore(c)
+            chr.update_chore()
+        usr_id = session.get('user_id', None)
         return redirect(url_for('chores', usr=usr_id))
 
 @app.route("/incomplete", methods=['GET', 'POST'])
 def incomplete_chores():
     if request.method == 'POST':
-        usr_id = session.get('user_id', None)
-        usr_chore_name = (request.form.get('user'))
         chores = (request.form.getlist('chr'))
         for c in chores:
-            chr = chap.create_chore_with_user_name(c, usr_chore_name)
+            chr = chap.create_chore(c)
             chr.update_chore()
-
+        usr_id = session.get('user_id', None)
         return redirect(url_for('chores', usr=usr_id))
         
 
@@ -301,9 +216,9 @@ def run_chappy():
     day = datetime.datetime.today().weekday()
 
     for org_id in org_ids:
-        query_org_users = ("SELECT user_id FROM users WHERE '" + org_id[0] +"' = ANY(org_ids);")
+        query_org_users = ("SELECT user_id FROM users WHERE '" + org_id[0] +"' = ANY(org_ids) and user_super_user = False;")
         org_users = chap.query_chappy(query_org_users)
-        org_users.remove(('0a7c6286-fcab-4e19-a7a9-c5c24e926a2c',))
+
         query_org_chores = ("SELECT chore_id FROM chores WHERE org_id = '" + org_id[0] + "';")
         org_chores = chap.query_chappy(query_org_chores)
         

@@ -27,10 +27,11 @@
       <form action="/update" method="POST">
       {% for chr in chrs[name] %}
         <input id='label-{{ counter[0] }}' type="checkbox" name="chr" value="{{ chr }}"/>
+	<input id='label-{{ counter[0] }}' type="hidden" name="user" value="{{ name }}"/>
         <label for="label-{{ counter[0] }}">
           <h5>
             {{ chr }}
-            <span>org_id: {{ o[chr][0] }}</span>
+            <span>org_id: {{ chr }}</span>
           </h5>
         </label>
         {% if counter.append(counter.pop() + 1) %}{% endif %}
@@ -47,10 +48,11 @@
     <form action="/incomplete" method="POST">
     {% for chr in dchrs[name] %}
       <input id='label-{{ counter[0] }}' type="checkbox" name="chr" value="{{ chr }}"/>
+      <input id='label-{{ counter[0] }}' type="hidden" name="user" value="{{ name }}"/>
       <label for="label-{{ counter[0] }}">
         <h5>
           {{ chr }}
-          <span>org_id: {{ o[chr][0] }}</span>
+          <span>org_id: {{ chr }}</span>
         </h5>
       </label>
       {% if counter.append(counter.pop() + 1) %}{% endif %}

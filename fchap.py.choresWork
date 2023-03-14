@@ -22,7 +22,7 @@ patch_all()
 config.flask['service_name'] = 'zstall-chappy-ubuntu'
 config.chore['service_name'] = 'chore-service'
 config.python['service_name'] = 'zstall-login'
-ddtrace.config.flask['service_name']='apm-chappy-service'
+
 
 chore_formatter = json_log_formatter.JSONFormatter()
 chore_json_handler = logging.FileHandler(filename='/var/log/chore/chore-log.json')
@@ -41,12 +41,12 @@ logger.addHandler(json_handler)
 logger.setLevel(logging.INFO)
 
 
-
 #FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] [dd.service=%(dd.service)s dd.env=%(dd.env)s dd.version=%(dd.version)s dd.trace_id=%(dd.trace_id)s dd.span_id=%(dd.span_id)s] - %(message)s')
 
 FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
-          '[dd.env=%(dd.env)s dd.version=%(dd.version)s dd.trace_id=%(dd.trace_id)s dd.span_id=%(dd.span_id)s] '
+          '[dd.service=%(dd.service)s dd.env=%(dd.env)s dd.version=%(dd.version)s dd.trace_id=%(dd.trace_id)s dd.span_id=%(dd.span_id)s] '
           '- %(message)s')
+
 
 logging.basicConfig(format=FORMAT)
 
@@ -120,9 +120,8 @@ def register():
 def login():
     now = datetime.now()
     zstall_thread= threading.currentThread().getName()
-    logger.info('zstall-login ' + str(now) + 'a user just attempted to login.',
+    logger.info('zstall-login ' + str(now),
         extra={
-            'dd.service': 'login-log',
             'job_category': 'login_function',
             'logger.name': 'zstall_json',
             'logger.service': 'zstall-login',
@@ -160,10 +159,9 @@ def chores(usr):
     
     usr = chap.create_user_with_id(usr)
     usr_id = usr.user_id
-    chore_thread= threading.currentThread().getName()
-    chore_logger.info('chappy-chores ' + str(now) + ' this fooo('+str(usr.username)+') trying to do chores',
+
+    logger.info('chappy-chores ' + str(now),
             extra={
-            'dd.service': 'chore-log',     
             'job_category': 'chore_function',
             'logger.name': 'chore_json',
             'logger.service': 'chore-service',
@@ -173,10 +171,10 @@ def chores(usr):
                 }
             )
     with tracer.trace("chappy_chore_trace") as span:
-       # Designate this span as a separate service:
-       span.service="chappy_chore_service"
-       # Add metadata:
-       span.set_tag('service_type','chappy_chore_service')
+        # Designate this span as a separate service:
+        span.service="chappy_chore_service"
+        # Add metadata:
+        span.set_tag('service_type','chappy_chore_service')
 
 
     if usr.admin == True:

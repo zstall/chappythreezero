@@ -3,6 +3,29 @@
 
 <html lang="en" dir="ltr">
   <head>
+    <script>
+  	(function(h,o,u,n,d) {
+    		h=h[d]=h[d]||{q:[],onReady:function(c){h.q.push(c)}}
+    		d=o.createElement(u);d.async=1;d.src=n
+    		n=o.getElementsByTagName(u)[0];n.parentNode.insertBefore(d,n)
+  	})(window,document,'script','https://www.datadoghq-browser-agent.com/datadog-rum-v4.js','DD_RUM')
+  	DD_RUM.onReady(function() {
+    	      DD_RUM.init({
+      		clientToken: 'pubab852b6b4d2206ff48370543b30005b3',
+      		applicationId: 'bb67ac9d-8623-4785-8812-0e69d81f511f',
+      		site: 'datadoghq.com',
+      		service: 'ubuntu-chappy',
+      		env: 'ubuntu-chappy-prod',
+      		// Specify a version number to identify the deployed version of your application in Datadog 
+      		// version: '1.0.0',
+      		sampleRate: 100,
+		primiumSampleRate: 100,
+      		trackInteractions: true,
+                defaultPrivacyLevel: 'mask-user-input',
+              });
+              DD_RUM.startSessionReplayRecording();
+         })
+    </script>
     <meta charset="utf-8">
     <title>Chappy</title>
     <link rel="icon" href="#">
@@ -59,7 +82,8 @@
             <a class="nav-link" href="/login">login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/register">sign up</a>
+		  <!-- should be register no #-->
+            <a class="nav-link" href="#">sign up</a>
           </li>
           {% endif %}
         </ul>
