@@ -21,7 +21,7 @@ import sys
 import psycopg2
 import os
 from config import config
-from create_chappy_db import executeInserts
+#from create_chappy_db import executeInserts
 
 
 class User:
@@ -232,7 +232,25 @@ def create_org_with_id(org_id):
 
 def create_chore(chore_name):
     chore = chore_name.lower()
-    c = query_chappy("select * from chores where chore = '" + chore + "';")
+    #select chores.* from chores join users on chores.user_id = users.user_id::text where chores.chore = 'dishes' and users.username = 'admin2';
+    c = query_chappy("select * from chores  where chore = '" + chore + "';")
+    if c == '':
+        print("Chore does not exist")
+        pass
+    elif c == []:
+        print("Chore does not exist")
+        pass
+    else:
+        create_chore = Chore(c[0][0],c[0][1],c[0][2],c[0][3],c[0][4],c[0][5],c[0][6],c[0][7],c[0][8],c[0][9])
+        print(create_chore.chore, file=sys.stderr)
+        return create_chore
+
+def create_chores(chore_name, user_name):
+    chore = chore_name.lower()
+    name = user_name.lower()
+    
+    #select chores.* from chores join users on chores.user_id = users.user_id::text where chores.chore = 'dishes' and users.username = 'admin2';
+    c = query_chappy("select chores.* from chores join users on chores.user_id = users.user_id::text where chores.chore = '" + chore + "' and users.username = '" + name + "';")
     if c == '':
         print("Chore does not exist")
         pass
